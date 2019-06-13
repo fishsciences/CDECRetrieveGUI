@@ -1,0 +1,21 @@
+Package: CDECRetrieveGUI
+Type: Package
+Title: Shiny Gadget for CDECRetrieve Package
+Version: 0.1.0
+Author: Travis Hinkelman
+Maintainer: Travis Hinkelman <travis.hinkelman@fishsciences.net>
+Description: A map-based interface to the CDECRetrieve package.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+  leaflet,
+  shinyWidgets,
+  dplyr,
+  DT,
+  miniUI (>= 0.1.1),
+  rstudioapi (>= 0.5),
+  shiny (>= 0.13),
+Remotes:
+  FlowWest/CDECRetrieve
+RoxygenNote: 6.1.1

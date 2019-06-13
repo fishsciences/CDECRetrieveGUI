@@ -1,0 +1,4 @@
+Name: CDECRetrieveGUI
+Description: A map-based interface to the CDECRetrieve package.
+Binding: CDECRetrieveGadget
+Interactive: true
