@@ -4,7 +4,7 @@ A map-based interface to the [`CDECRetrieve` package](https://github.com/FlowWes
 
 ### Prerequisites
 
-Installation requires the R package 'devtools' and a working development environment (see https://github.com/hadley/devtools).
+Installation requires the R package `devtools` and a working development environment (see https://github.com/hadley/devtools).
 
 ```
 install.packages("devtools")
