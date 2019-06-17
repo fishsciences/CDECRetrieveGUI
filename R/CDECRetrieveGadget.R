@@ -167,9 +167,9 @@ CDECRetrieveGadget <- function() {
       s <- input$sensorDataTable_rows_selected
       if (!is.null(s)){
         d <- sensorData()[s,]
-        rv$query = paste0("cdec_query(station = \"", d$station_id, "\", sensor_num = ",
-                          d$sensor_number, ", dur_code = \"", d$duration,
-                          "\",\n           start_date = \"", input$date_range[1], "\", end_date = \"",
+        rv$query = paste0("CDECRetrieve::cdec_query(\n  station = \"", d$station_id,
+                          "\", sensor_num = ", d$sensor_number, ", dur_code = \"", d$duration,
+                          "\",\n  start_date = \"", input$date_range[1], "\", end_date = \"",
                           input$date_range[2], "\")")
       }else{
         rv$query = "Not a valid query.\nSelect a station from the map and a row from the sensor table."
@@ -194,3 +194,8 @@ CDECRetrieveGadget <- function() {
                                               width = 900, height = 650))
 }
 
+
+
+CDECRetrieve::cdec_query(
+  station = "FPT", sensor_num = 20, dur_code = "daily",
+  start_date = "1948-10-01", end_date = "2019-06-17")
