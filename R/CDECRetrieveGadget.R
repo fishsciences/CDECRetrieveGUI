@@ -64,7 +64,7 @@ CDECRetrieveGadget <- function() {
         setView(lng = -121.5, lat = 38.6, zoom = 9)
     })
 
-    proxyMap = leafletProxy("map")
+    proxyMap <- leafletProxy("map")
 
     stationData <- reactive({
       # midpoint of lat/lng coords from http://www.geomidpoint.com/calculation.html
@@ -84,11 +84,11 @@ CDECRetrieveGadget <- function() {
     stationDataSub <- reactive({
       d <- stationData() %>%
         mutate(latlong = paste0(latitude, longitude))
-      ll = d$latlong[d$station_id == rv$selected_station]  # some stations have the same coordinates
+      ll <- d$latlong[d$station_id == rv$selected_station]  # some stations have the same coordinates
       d %>% filter(latlong %in% ll) %>% select(-latlong)
     })
 
-    output$stationDataSubTable = DT::renderDT(
+    output$stationDataSubTable <- DT::renderDT(
       select(stationDataSub(), station_id, name, river_basin, county, elevation, operator),
       selection = "none", style = "bootstrap", rownames = FALSE,
       options = list(bLengthChange = FALSE, bPaginate = FALSE, searching = FALSE))
@@ -97,13 +97,13 @@ CDECRetrieveGadget <- function() {
     observeEvent(input$county, {
       req(stationData())              # seems to stop warnings about Unknown or uninitialised columns
       station_data <- stationData()
-      x = mean(station_data$X, na.rm = TRUE)
-      y = mean(station_data$Y, na.rm = TRUE)
-      z = mean(station_data$Z, na.rm = TRUE)
-      hyp = sqrt(x^2 + y^2)
+      x <- mean(station_data$X, na.rm = TRUE)
+      y <- mean(station_data$Y, na.rm = TRUE)
+      z <- mean(station_data$Z, na.rm = TRUE)
+      hyp <- sqrt(x^2 + y^2)
 
       # 9 is default zoom level; not sure why this extra hoop was needed
-      mz = ifelse(is.null(input$map_zoom), 9, input$map_zoom)
+      mz <- ifelse(is.null(input$map_zoom), 9, input$map_zoom)
       proxyMap %>%
         clearMarkers() %>%
         setView(lng = atan2(y, x) * 180/pi,
@@ -120,10 +120,10 @@ CDECRetrieveGadget <- function() {
       p <- input$map_marker_click
       req(p$id)
       if (p$id ==  "SelectedStation") {
-        rv$selected_station = NULL
+        rv$selected_station <- NULL
         proxyMap %>% removeMarker(layerId = p$id)
       } else {
-        rv$selected_station = p$id
+        rv$selected_station <- p$id
         proxyMap %>%
           setView(lng = p$lng, lat = p$lat, input$map_zoom) %>%
           # add selected marker
@@ -138,15 +138,15 @@ CDECRetrieveGadget <- function() {
 
     sensorData <- reactive({
       # some stations have identical lat/lng and can't be selected separately from the map
-      stations = unique(stationDataSub()$station_id)
-      out = list()
+      stations <- unique(stationDataSub()$station_id)
+      out <- list()
       for (i in stations){
-        out[[i]] = cdec_datasets(i)
+        out[[i]] <- cdec_datasets(i)
       }
       bind_rows(out, .id = "station_id")
     })
 
-    output$sensorDataTable = DT::renderDT(
+    output$sensorDataTable <- DT::renderDT(
       sensorData(), selection = "single", style = "bootstrap", rownames = FALSE,
       options = list(pageLength = 4, bLengthChange = FALSE, bPaginate = TRUE, searching = FALSE))
 
@@ -167,12 +167,12 @@ CDECRetrieveGadget <- function() {
       s <- input$sensorDataTable_rows_selected
       if (!is.null(s)){
         d <- sensorData()[s,]
-        rv$query = paste0("CDECRetrieve::cdec_query(\n  station = \"", d$station_id,
-                          "\", sensor_num = ", d$sensor_number, ", dur_code = \"", d$duration,
-                          "\",\n  start_date = \"", input$date_range[1], "\", end_date = \"",
-                          input$date_range[2], "\")")
+        rv$query <- paste0("CDECRetrieve::cdec_query(\n  station = \"", d$station_id,
+                           "\", sensor_num = ", d$sensor_number, ", dur_code = \"", d$duration,
+                           "\",\n  start_date = \"", input$date_range[1], "\", end_date = \"",
+                           input$date_range[2], "\")")
       }else{
-        rv$query = "Not a valid query.\nSelect a station from the map and a row from the sensor table."
+        rv$query <- "Not a valid query.\nSelect a station from the map and a row from the sensor table."
       }
     })
 
@@ -194,8 +194,3 @@ CDECRetrieveGadget <- function() {
                                               width = 900, height = 650))
 }
 
-
-
-CDECRetrieve::cdec_query(
-  station = "FPT", sensor_num = 20, dur_code = "daily",
-  start_date = "1948-10-01", end_date = "2019-06-17")
