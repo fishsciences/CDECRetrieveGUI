@@ -4,20 +4,21 @@ A map-based interface to the [`CDECRetrieve` package](https://github.com/FlowWes
 
 ### Prerequisites
 
-Installation requires the R package `devtools` and a working development environment (see https://github.com/hadley/devtools).
-
-```
-install.packages("devtools")
-```
-
 An internet connection is required both to display the map and retrieve data from CDEC. 
+
+Installation of CDECRetrieve and CDECRetrieveGUI requires the R package [`remotes`](https://remotes.r-lib.org).
+
+```
+> install.packages("remotes")
+```
 
 ### Installation
 
-`CDECRetrieveGUI` is only available through Github.
+`CDECRetrieve` and `CDECRetrieveGUI` are only available through GitHub.
 
 ```
-devtools::install_github("fishsciences/CDECRetrieveGUI")
+> remotes::install_github("fishsciences/CDECRetrieveGUI")
+> remotes::install_github("flowwest/CDECRetrieve")
 ```
 
 ### Basic Usage
@@ -25,7 +26,7 @@ devtools::install_github("fishsciences/CDECRetrieveGUI")
 After installing the `CDECRetrieveGUI` package, a menu item is added to the Addins dropdown menu in RStudio. Selecting `CDECRetrieveGUI` from the Addins menu will launch the `CDECRetrieveGadget`. Alternatively, you can launch the gadget by running the following code in RStudio.
 
 ```
-CDECRetrieveGUI::CDECRetrieveGadget()
+> CDECRetrieveGUI::CDECRetrieveGadget()
 ```
 
 Station locations are mapped by selecting a county from the dropdown menu in the top right corner of the `CDECRetrieveGadget`. When the gadget is first launched, `Sacramento` is selected from the county dropdown menu,  `CDECRetrieve::cdec_stations(county = "SACRAMENTO")` is run, and results are mapped. Clicking on a circle displays the Station ID in a popup and selects the station for use on the `Build Query` tab. 
