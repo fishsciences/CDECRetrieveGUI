@@ -17,5 +17,5 @@ Imports:
   rstudioapi (>= 0.5),
   shiny (>= 0.13),
 Remotes:
-  FlowWest/CDECRetrieve
+  flowwest/CDECRetrieve
 RoxygenNote: 6.1.1
