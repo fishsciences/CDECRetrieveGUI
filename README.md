@@ -6,7 +6,7 @@ A map-based interface to the [`CDECRetrieve` package](https://github.com/FlowWes
 
 An internet connection is required both to display the map and retrieve data from CDEC. 
 
-Installation of CDECRetrieve and CDECRetrieveGUI requires the R package [`remotes`](https://remotes.r-lib.org).
+Installation of CDECRetrieve and CDECRetrieveGUI require the R package [`remotes`](https://remotes.r-lib.org).
 
 ```
 > install.packages("remotes")
