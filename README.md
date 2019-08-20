@@ -17,8 +17,8 @@ Installation of CDECRetrieve and CDECRetrieveGUI require the R package [`remotes
 `CDECRetrieve` and `CDECRetrieveGUI` are only available through GitHub.
 
 ```
-> remotes::install_github("fishsciences/CDECRetrieveGUI")
 > remotes::install_github("flowwest/CDECRetrieve")
+> remotes::install_github("fishsciences/CDECRetrieveGUI")
 ```
 
 ### Basic Usage
