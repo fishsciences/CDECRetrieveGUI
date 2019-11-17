@@ -46,8 +46,8 @@ CDECRetrieveGadget <- function() {
                               br(),
                               verbatimTextOutput("queryText")),
                        column(width = 4,
-                              dateRangeInput("date_range", "Date range"),
-                              actionButton("send_code", "Insert code in script"))
+                              uiOutput("dateRange"),
+                              uiOutput("sendCode"))
                      )
                    )
       )
@@ -150,34 +150,34 @@ CDECRetrieveGadget <- function() {
       sensorData(), selection = "single", style = "bootstrap", rownames = FALSE,
       options = list(pageLength = 4, bLengthChange = FALSE, bPaginate = TRUE, searching = FALSE))
 
-    observe({
-      # can't use observeEvent because unselecting a row won't allow for resetting of date range picker
-      s <- input$sensorDataTable_rows_selected
-      if (!is.null(s)){
-        d <- sensorData()[s,]
-        updateDateRangeInput(session, "date_range", start = d$start, end = d$end, min = d$start, max = d$end)
-      }else{
-        # reset date range picker
-        updateDateRangeInput(session, "date_range", start = NA, end = NA, min = NA, max = NA)
-      }
+    selectedSensor <- reactive({
+      req(input$sensorDataTable_rows_selected)
+      sensorData()[input$sensorDataTable_rows_selected,]
     })
 
-    observe({
-      # can't combine with the date range observer because query depends on date range
-      s <- input$sensorDataTable_rows_selected
-      if (!is.null(s)){
-        d <- sensorData()[s,]
-        rv$query <- paste0("CDECRetrieve::cdec_query(\n  station = \"", d$station_id,
-                           "\", sensor_num = ", d$sensor_number, ", dur_code = \"", d$duration,
-                           "\",\n  start_date = \"", input$date_range[1], "\", end_date = \"",
-                           input$date_range[2], "\")")
-      }else{
-        rv$query <- "Not a valid query.\nSelect a station from the map and a row from the sensor table."
-      }
+    output$dateRange <- renderUI({
+      req(input$sensorDataTable_rows_selected)
+      d <- selectedSensor()
+      dateRangeInput("date_range", "Date range", start = d$start, end = d$end, min = d$start, max = d$end)
     })
 
     output$queryText <- renderText({
+      validate(need(!is.null(rv$selected_station), "Select a station from the map."))
+      validate(need(!is.null(input$sensorDataTable_rows_selected),
+                    "Select a row from the sensor table to generate query code."))
+
+      d <- selectedSensor()
+      rv$query <- paste0("CDECRetrieve::cdec_query(\n  station = \"", d$station_id,
+                         "\", sensor_num = ", d$sensor_number, ", dur_code = \"", d$duration,
+                         "\",\n  start_date = \"", input$date_range[1], "\", end_date = \"",
+                         input$date_range[2], "\")")
       rv$query
+    })
+
+    output$sendCode <- renderUI({
+      # using renderUI to show/hide button
+      req(input$sensorDataTable_rows_selected)
+      actionButton("send_code", "Insert code in script")
     })
 
     observeEvent(input$send_code,{
